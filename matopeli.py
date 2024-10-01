@@ -26,10 +26,28 @@ class SnakeGame(QGraphicsView):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_game)
         
-        self.start_game()
+        # pelin aloitus nappia painamalla
+        self.game_started = False  # logiikka pelin aloitukseen nappia painamalla
+        self.init_screen()  # Näytä aloitusruutu
+    
+    # metodi aloitusruudun tekstiin
+    def init_screen(self):
+        start_text = self.scene().addText("Paina jotain nappia aloittaaksesi pelin", QFont("Arial", 18))
+        text_width = start_text.boundingRect().width()
+        text_x = (self.width() - text_width) / 5
+        start_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
 
-    def keyPressEvent(self, event): #Ei Tarvitse Muokata, Tämä liikuttaa matoa nuolinäppäimillä
-        key = event.key()
+    def keyPressEvent(self, event):
+        key = event.key()  # napin painamisen assignaaminen
+        
+        # pelin aloitus nappia painamalla
+        if not self.game_started:  # varmistus että pelin aloitus onnistuu
+            self.game_started = True
+            self.scene().clear()
+            self.start_game()
+            return
+        
+        # Ei Tarvitse Muokata, Tämä liikuttaa matoa nuolinäppäimillä
         if key in (Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down):
             # päivitetään suunta vain jos se ei ole vastakkainen valitulle suunnalle
             if key == Qt.Key_Left and self.direction != Qt.Key_Right:
