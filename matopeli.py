@@ -28,7 +28,7 @@ class SnakeGame(QGraphicsView):
         
         self.start_game()
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event): #Ei Tarvitse Muokata, Tämä liikuttaa matoa nuolinäppäimillä
         key = event.key()
         if key in (Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down):
             # päivitetään suunta vain jos se ei ole vastakkainen valitulle suunnalle
