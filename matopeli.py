@@ -62,7 +62,8 @@ class SnakeGame(QGraphicsView):
             elif key == Qt.Key_Up and self.direction != Qt.Key_Down:
                 self.direction = key
             elif key == Qt.Key_Down and self.direction != Qt.Key_Up:
-                self.direction = key
+                self.direction = key    
+
 
     def update_game(self):
         head_x, head_y = self.snake[0]
@@ -98,16 +99,33 @@ class SnakeGame(QGraphicsView):
 
         self.print_game()
 
+
+    #Uusi metodi pallojen luomiseen
+    def spawn_food(self):
+        while True:
+            x = random.randint(0, GRID_WIDTH - 1)
+            y = random.randint(0, GRID_HEIGHT - 1)
+
+            #Varmistaa ettei pallot ilmesty madon päälle
+            if (x, y) not in self.snake:
+                return x, y
+
+
     def print_game(self):
         self.scene().clear()
 
         for segment in self.snake:
             x, y = segment
             self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.black))
+
+        # Piirretään pallot
+        fx, fy = self.food
+        self.scene().addRect(fx * CELL_SIZE, fy * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.red))
         
     def start_game(self):
         self.direction = Qt.Key_Right
         self.snake = [(5, 5), (5, 6), (5, 7)]
+        self.food = self.spawn_food() # luodaan pallot
         self.timer.start(300)
         
         self.print_game()
