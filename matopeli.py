@@ -2,7 +2,7 @@
 # 'pip install PySide6' tarvitaan
 # Rasmus
 # Joakim 
-# Markus Koski
+# Markus
 # Miika
 import sys
 import random
