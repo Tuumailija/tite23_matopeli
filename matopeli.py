@@ -32,7 +32,7 @@ class SnakeGame(QGraphicsView):
     
     # metodi aloitusruudun tekstiin
     def init_screen(self):
-        start_text = self.scene().addText("Paina jotain nappia aloittaaksesi pelin", QFont("Arial", 18))
+        start_text = self.scene().addText("Paina jotain nappia aloittaaksesi pelin", QFont("Arial", 16)) #Peinennin fonttia jotta näyttää vähän paremmalta T Markus
         text_width = start_text.boundingRect().width()
         text_x = (self.width() - text_width) / 5
         start_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
@@ -40,8 +40,13 @@ class SnakeGame(QGraphicsView):
     def keyPressEvent(self, event):
         key = event.key()  # napin painamisen assignaaminen
         
-        # pelin aloitus nappia painamalla
+        # pelin aloitus nappia painamalla (jos ei ole vielä aloitettu)
         if not self.game_started:  # varmistus että pelin aloitus onnistuu
+            # Estetään nuolinäppäinten käyttö pelin uudelleenaloitukseen
+            if key in (Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down):
+                return  # Ei tehdä mitään nuolinäppäimillä
+
+            #Poistetaan "Game over" teksti ja aloitetaan uusi peli
             self.game_started = True
             self.scene().clear()
             self.start_game()
@@ -73,13 +78,17 @@ class SnakeGame(QGraphicsView):
 
         # Tarkistetaan osuma pelialueen rajoihin tai matoon itseensä
         if (new_head in self.snake or not (0 <= new_head[0] < GRID_WIDTH) or not (0 <= new_head[1] < GRID_HEIGHT)): # Mato osuu itseensä, vasemmalle/oikealle seinälle tai ylä/ala seinälle
+
             self.timer.stop() #Pysäyttää pelin
             
             # "Game over" teksti
-            game_over_text = self.scene().addText("Game Over", QFont("Arial", 24))
+            game_over_text = self.scene().addText("Game Over\nAloita uusi peli painamalla mitä tahansa näppäintä", QFont("Arial", 12)) #Pienennin fonttia jotta saa tekstin mahtumaan T Markus
             text_width = game_over_text.boundingRect().width()
             text_x = (self.width() - text_width) / 2 # Keskittää vaakasuunassa
             game_over_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2) # Asetetaan pystysuunassa
+
+            #Asetetaan peli uudelleenaloitus tilaan
+            self.game_started = False
             return
 
 
@@ -100,6 +109,9 @@ class SnakeGame(QGraphicsView):
         self.direction = Qt.Key_Right
         self.snake = [(5, 5), (5, 6), (5, 7)]
         self.timer.start(300)
+
+
+
 
 def main():
     app = QApplication(sys.argv)
