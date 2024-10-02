@@ -32,7 +32,7 @@ class SnakeGame(QGraphicsView):
     
     # metodi aloitusruudun tekstiin
     def init_screen(self):
-        start_text = self.scene().addText("Paina jotain nappia aloittaaksesi pelin", QFont("Arial", 16)) #Peinennin fonttia jotta näyttää vähän paremmalta T Markus
+        start_text = self.scene().addText("Paina näppäintä aloittaaksesi", QFont("Arial", 16)) #Peinennin fonttia jotta näyttää vähän paremmalta T Markus
         text_width = start_text.boundingRect().width()
         text_x = (self.width() - text_width) / 5
         start_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
@@ -95,7 +95,10 @@ class SnakeGame(QGraphicsView):
 
         self.snake.insert(0, new_head)
         
-        self.snake.pop()
+        if new_head == self.food:
+            self.food = self.spawn_food()
+        else:
+            self.snake.pop()
 
         self.print_game()
 
