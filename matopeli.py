@@ -20,6 +20,7 @@ class SnakeGame(QGraphicsView):
         super().__init__()
 
         self.setScene(QGraphicsScene(self))
+        self.score = 0
         self.setRenderHint(QPainter.Antialiasing)
         self.setSceneRect(0, 0, CELL_SIZE * GRID_WIDTH, CELL_SIZE * GRID_HEIGHT)
 
@@ -96,11 +97,13 @@ class SnakeGame(QGraphicsView):
         self.snake.insert(0, new_head)
         
         if new_head == self.food:
+            self.score += 1
             self.food = self.spawn_food()
         else:
             self.snake.pop()
 
         self.print_game()
+        
 
 
     #Uusi metodi pallojen luomiseen
@@ -123,6 +126,7 @@ class SnakeGame(QGraphicsView):
 
         # Piirretään pallot
         fx, fy = self.food
+        self.scene().addText(f'Pisteet: {self.score}', QFont('Arial', 12))
         self.scene().addRect(fx * CELL_SIZE, fy * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.red))
         
     def start_game(self):
@@ -132,6 +136,8 @@ class SnakeGame(QGraphicsView):
         self.timer.start(300)
         
         self.print_game()
+        self.score = 0
+        
 
 
 
